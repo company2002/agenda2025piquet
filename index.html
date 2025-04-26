@@ -32,18 +32,89 @@
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
         }
 
         .main-container {
+            flex: 1;
             display: flex;
-            height: 100vh;
+            position: relative;
+            min-height: calc(100vh - 150px);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: var(--text);
+        }
+
+        .ia-toggle {
+            display: none;
+            background: var(--primary);
+            color: var(--text);
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .mobile-controls {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--sidebar);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: calc(100vh - 60px);
+            background: var(--sidebar);
+            padding: 1rem;
+            z-index: 998;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            left: 0;
+        }
+
+        .mobile-filter-section {
+            margin: 0;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
         }
 
         .tasks-section {
             flex: 1;
             padding: 2rem;
+            padding-bottom: 150px;
+            padding-right: 420px;
+            /* Espaço para o Assistente IA */
             overflow-y: auto;
         }
 
@@ -54,6 +125,15 @@
             border-left: 1px solid var(--shadow);
             display: flex;
             flex-direction: column;
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: hidden;
+            z-index: 900;
+            /* Garantir que fique acima das tarefas */
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+            /* Sombra para destacar */
         }
 
         .header-with-trash {
@@ -94,6 +174,45 @@
             font-size: 0.8rem;
             min-width: 20px;
             text-align: center;
+        }
+
+        .whatsapp-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+        }
+
+        .whatsapp-input-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .whatsapp-input-container input {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .whatsapp-send-all {
+            white-space: nowrap;
+            padding: 0.8rem 1.2rem;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-send-all:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
         }
 
         .task-form {
@@ -346,6 +465,7 @@
             margin-bottom: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
+            height: calc(100vh - 200px);
         }
 
         .chat-message {
@@ -428,11 +548,389 @@
             transform: translateX(5px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
+
+        .filter-section {
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 1rem;
+            padding-right: 40px;
+        }
+
+        .search-input-container {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-button {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: var(--text);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .filter-buttons button {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-buttons button:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .filter-buttons button.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Estilos responsivos */
+        @media screen and (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .assistant-section {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid var(--shadow);
+            }
+
+            .filter-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .whatsapp-input-container {
+                flex-direction: column;
+            }
+
+            .whatsapp-send-all {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                z-index: 1000;
+                background: var(--card-bg);
+                padding: 0.5rem;
+                border-radius: 4px;
+            }
+
+            .mobile-controls {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 999;
+                padding: 1rem;
+                background: var(--sidebar);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+
+            .ia-toggle {
+                display: block;
+                background: var(--primary);
+                color: var(--text);
+                border: none;
+                border-radius: 6px;
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+            }
+
+            .ia-toggle:hover {
+                background: var(--primary-dark);
+                transform: translateY(-2px);
+            }
+
+            .menu-toggle span {
+                width: 25px;
+                height: 3px;
+                background: var(--text);
+                margin: 2px 0;
+                transition: all 0.3s ease;
+            }
+
+            .menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+
+            .tasks-section {
+                margin-top: 60px;
+                padding-bottom: 120px;
+                padding-right: 2rem;
+                /* Remove o padding extra em telas pequenas */
+            }
+
+            .assistant-section {
+                display: none;
+                position: fixed;
+                right: -100%;
+                top: 0;
+                height: 100vh;
+                width: 80%;
+                max-width: 300px;
+                z-index: 1001;
+                transition: all 0.3s ease;
+                background: var(--sidebar);
+                box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+            }
+
+            .assistant-section.active {
+                display: block;
+                right: 0;
+            }
+
+            .task-form {
+                padding: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button-group button {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+
+            .task-actions {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .task-actions button {
+                flex: 1;
+                min-width: calc(33.33% - 0.5rem);
+                padding: 0.5rem;
+            }
+
+            .mobile-menu {
+                display: block;
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: calc(100vh - 60px);
+                background: var(--sidebar);
+                padding: 1rem;
+                z-index: 998;
+                transition: left 0.3s ease;
+                overflow-y: auto;
+            }
+
+            .mobile-menu.active {
+                left: 0;
+            }
+
+            .mobile-filter-section {
+                display: flex !important;
+                flex-direction: column;
+                gap: 1rem;
+                margin: 0;
+                padding: 1rem;
+                background: var(--card-bg);
+                border-radius: 8px;
+            }
+
+            .mobile-filter-section .search-bar,
+            .mobile-filter-section .filter-buttons {
+                display: flex !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+
+            .mobile-filter-section .filter-buttons {
+                flex-direction: column;
+            }
+
+            .mobile-filter-section .filter-buttons button {
+                width: 100%;
+                margin: 0.2rem 0;
+                padding: 0.8rem;
+                text-align: left;
+            }
+
+            .filter-section:not(.mobile-filter-section) {
+                display: none;
+            }
+
+            .tasks-section {
+                margin-top: 60px;
+            }
+
+            .main-container {
+                min-height: calc(100vh - 120px);
+                /* Ajuste para telas menores */
+            }
+
+            footer {
+                padding: 1rem;
+                width: 100%;
+            }
+
+        }
+
+        @media screen and (max-width: 480px) {
+            .task-item {
+                padding: 1rem;
+            }
+
+            .filter-buttons button {
+                width: calc(50% - 0.4rem);
+            }
+
+            input,
+            select,
+            textarea {
+                font-size: 16px;
+                /* Previne zoom em dispositivos iOS */
+            }
+
+            footer {
+                padding: 0.8rem;
+            }
+
+        }
+
+        footer {
+            background: var(--card-bg);
+            color: var(--text);
+            padding: 1.5rem;
+            text-align: center;
+            width: 100%;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+            box-sizing: border-box;
+
+        }
+
+        footer p {
+            font-size: 13px;
+            margin: 8px 0;
+            padding: 0 15px;
+            text-align: center;
+            margin-right: 20%;
+            line-height: 1.0;
+            align-items: center;
+
+        }
+
+        footer a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
     </style>
 </head>
 
 <body>
     <div class="main-container">
+        <div class="mobile-controls">
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <button class="ia-toggle" id="iaToggle" data-tooltip="Abrir Assistente IA">
+                🤖 IA
+            </button>
+        </div>
+
+        <!-- Menu hambúrguer móvel (apenas busca e filtros) -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="filter-section mobile-filter-section">
+                <div class="search-bar">
+                    <div class="search-input-container">
+                        <input type="text" id="searchInput" placeholder="Buscar tarefas..."
+                            onkeyup="taskManager.searchTasks()">
+                        <button class="search-button" onclick="taskManager.searchTasks()"
+                            data-tooltip="Buscar">🔍</button>
+                    </div>
+                </div>
+                <div class="filter-buttons">
+                    <button onclick="taskManager.filterTasks('all')"
+                        data-tooltip="Mostrar todas as tarefas">Todas</button>
+                    <button onclick="taskManager.filterTasks('high')"
+                        data-tooltip="Mostrar tarefas de alta prioridade">Alta Prioridade</button>
+                    <button onclick="taskManager.filterTasks('medium')"
+                        data-tooltip="Mostrar tarefas de média prioridade">Média Prioridade</button>
+                    <button onclick="taskManager.filterTasks('low')"
+                        data-tooltip="Mostrar tarefas de baixa prioridade">Baixa Prioridade</button>
+                    <button onclick="taskManager.filterTasks('today')" data-tooltip="Mostrar tarefas para hoje">Para
+                        Hoje</button>
+                    <button onclick="taskManager.filterTasks('week')" data-tooltip="Mostrar tarefas desta semana">Esta
+                        Semana</button>
+                </div>
+            </div>
+        </div>
+
         <section class="tasks-section">
             <div class="header-with-trash">
                 <div class="header-title">
@@ -441,6 +939,42 @@
                         🗑
                         <span class="trash-count">0</span>
                     </button>
+                </div>
+            </div>
+
+            <div class="whatsapp-section">
+                <div class="whatsapp-input-container">
+                    <input type="tel" id="whatsappNumber" placeholder="Número do WhatsApp (com DDD)" pattern="[0-9]{11}"
+                        title="Digite um número com DDD (11 dígitos)">
+                    <button onclick="taskManager.sendAllTasksToWhatsApp()" class="whatsapp-send-all"
+                        data-tooltip="Enviar todas as tarefas para WhatsApp">
+                        📱 Enviar Todas
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="search-bar">
+                    <div class="search-input-container">
+                        <input type="text" id="searchInput" placeholder="Buscar tarefas..."
+                            onkeyup="taskManager.searchTasks()">
+                        <button class="search-button" onclick="taskManager.searchTasks()"
+                            data-tooltip="Buscar">🔍</button>
+                    </div>
+                </div>
+                <div class="filter-buttons">
+                    <button onclick="taskManager.filterTasks('all')"
+                        data-tooltip="Mostrar todas as tarefas">Todas</button>
+                    <button onclick="taskManager.filterTasks('high')"
+                        data-tooltip="Mostrar tarefas de alta prioridade">Alta Prioridade</button>
+                    <button onclick="taskManager.filterTasks('medium')"
+                        data-tooltip="Mostrar tarefas de média prioridade">Média Prioridade</button>
+                    <button onclick="taskManager.filterTasks('low')"
+                        data-tooltip="Mostrar tarefas de baixa prioridade">Baixa Prioridade</button>
+                    <button onclick="taskManager.filterTasks('today')" data-tooltip="Mostrar tarefas para hoje">Para
+                        Hoje</button>
+                    <button onclick="taskManager.filterTasks('week')" data-tooltip="Mostrar tarefas desta semana">Esta
+                        Semana</button>
                 </div>
             </div>
 
@@ -509,6 +1043,12 @@
         </section>
     </div>
 
+    <footer>
+        <p>Desenvolvido por Carlos Antonio de Oliveira Piquet, Estudante de Redes de Computadores </p>
+        <p>© 2025 - Todos os direitos reservados, contato para informações ou parcerias: <a
+                href="mailto:carlospiquet.projetos@gmail.com">carlospiquet.projetos@gmail.com</a></p>
+    </footer>
+
     <script>
         class GeminiAPI {
             constructor() {
@@ -567,8 +1107,51 @@
             init() {
                 this.setupEventListeners();
                 this.setupTrashModal();
+                this.setupMobileMenu();
                 this.render();
                 this.updateTrashCount();
+            }
+
+            setupMobileMenu() {
+                const menuToggle = document.getElementById('menuToggle');
+                const assistantSection = document.querySelector('.assistant-section');
+                const iaToggle = document.getElementById('iaToggle');
+                const mobileMenu = document.getElementById('mobileMenu');
+
+                menuToggle.addEventListener('click', () => {
+                    // Se o painel IA estiver aberto, fecha ele
+                    if (assistantSection.classList.contains('active')) {
+                        assistantSection.classList.remove('active');
+                    }
+
+                    // Alterna o menu hambúrguer
+                    menuToggle.classList.toggle('active');
+                    mobileMenu.classList.toggle('active');
+                });
+
+                iaToggle.addEventListener('click', () => {
+                    // Se o menu hambúrguer estiver aberto, fecha ele
+                    if (mobileMenu.classList.contains('active')) {
+                        mobileMenu.classList.remove('active');
+                        menuToggle.classList.remove('active');
+                    }
+
+                    // Alterna o painel IA
+                    assistantSection.classList.toggle('active');
+                });
+
+                // Fechar menus ao clicar fora
+                document.addEventListener('click', (e) => {
+                    if (!assistantSection.contains(e.target) &&
+                        !menuToggle.contains(e.target) &&
+                        !iaToggle.contains(e.target) &&
+                        !mobileMenu.contains(e.target)) {
+
+                        menuToggle.classList.remove('active');
+                        assistantSection.classList.remove('active');
+                        mobileMenu.classList.remove('active');
+                    }
+                });
             }
 
             loadTasks() {
@@ -774,6 +1357,71 @@
                 URL.revokeObjectURL(url);
             }
 
+            exportTaskToPDF(taskId) {
+                const task = this.tasks.find(t => t.id === taskId);
+                if (!task) return;
+
+                const content = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Tarefa: ${task.title}</title>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                line-height: 1.6;
+                                max-width: 800px;
+                                margin: 20px auto;
+                                padding: 20px;
+                            }
+                            .task-card {
+                                border: 1px solid #ddd;
+                                padding: 20px;
+                                border-radius: 8px;
+                                margin-bottom: 20px;
+                                background-color: #f9f9f9;
+                            }
+                            .priority-high { border-left: 5px solid #ff4444; }
+                            .priority-medium { border-left: 5px solid #ffbb33; }
+                            .priority-low { border-left: 5px solid #00C851; }
+                            .ai-summary {
+                                background-color: #f0f0f0;
+                                padding: 15px;
+                                border-radius: 5px;
+                                margin-top: 15px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="task-card priority-${task.priority}">
+                            <h1>${task.title}</h1>
+                            <p><strong>Descrição:</strong> ${task.description}</p>
+                            <p><strong>Prioridade:</strong> ${this.getPriorityText(task.priority)}</p>
+                            <p><strong>Data:</strong> ${task.date}</p>
+                            <p><strong>Hora:</strong> ${task.time}</p>
+                            <p><strong>Status:</strong> ${task.completed ? 'Concluída' : 'Pendente'}</p>
+                            <p><strong>Criado em:</strong> ${new Date(task.createdAt).toLocaleString()}</p>
+                            ${task.aiSummary ? `
+                                <div class="ai-summary">
+                                    <h3>Análise IA:</h3>
+                                    <p>${task.aiSummary}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <footer>
+                            <p>Exportado em: ${new Date().toLocaleString()}</p>
+                        </footer>
+                    </body>
+                    </html>
+                `;
+
+                const blob = new Blob([content], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                window.open(url, '_blank');
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+            }
+
             getPriorityText(priority) {
                 const priorities = {
                     high: 'Alta',
@@ -910,6 +1558,7 @@
                ` : ''}
            </div>
            <div class="task-actions">
+               <button onclick="taskManager.sendTaskToWhatsApp(${task.id})" data-tooltip="Enviar para WhatsApp">📱</button>
                <button data-tooltip="Gerar/Atualizar análise IA" 
                        onclick="taskManager.generateTaskSummary(${task.id})">📊</button>
                <button data-tooltip="Marcar como ${task.completed ? 'não concluído' : 'concluído'}" 
@@ -920,6 +1569,8 @@
                        onclick="taskManager.moveToTrash(${task.id})">🗑</button>
                <button data-tooltip="Excluir Análise IA" 
                        onclick="taskManager.deleteAISummary(${task.id})">❌ Análise</button>
+               <button data-tooltip="Exportar tarefa para PDF" 
+                       onclick="taskManager.exportTaskToPDF(${task.id})">📄</button>
            </div>
        `;
 
@@ -974,6 +1625,121 @@
                 setTimeout(() => {
                     toast.remove();
                 }, 3000);
+            }
+
+            filterTasks(filter) {
+                const container = document.getElementById('tasksContainer');
+                container.innerHTML = '';
+
+                let filteredTasks = [...this.tasks];
+
+                switch (filter) {
+                    case 'high':
+                        filteredTasks = filteredTasks.filter(task => task.priority === 'high');
+                        break;
+                    case 'medium':
+                        filteredTasks = filteredTasks.filter(task => task.priority === 'medium');
+                        break;
+                    case 'low':
+                        filteredTasks = filteredTasks.filter(task => task.priority === 'low');
+                        break;
+                    case 'today':
+                        const today = new Date().toISOString().split('T')[0];
+                        filteredTasks = filteredTasks.filter(task => task.date === today);
+                        break;
+                    case 'week':
+                        const now = new Date();
+                        const weekEnd = new Date();
+                        weekEnd.setDate(now.getDate() + 7);
+                        filteredTasks = filteredTasks.filter(task => {
+                            const taskDate = new Date(task.date);
+                            return taskDate >= now && taskDate <= weekEnd;
+                        });
+                        break;
+                    case 'all':
+                    default:
+                        break;
+                }
+
+                // Ordenar e renderizar as tarefas filtradas
+                filteredTasks = filteredTasks.sort((a, b) => {
+                    const priorityOrder = { high: 0, medium: 1, low: 2 };
+                    const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
+                    if (priorityDiff !== 0) return priorityDiff;
+                    return new Date(`${a.date} ${a.time}`) - new Date(`${b.date} ${b.time}`);
+                });
+
+                filteredTasks.forEach(task => {
+                    const taskElement = this.createTaskElement(task);
+                    container.appendChild(taskElement);
+                });
+            }
+
+            searchTasks() {
+                const searchInput = document.getElementById('searchInput');
+                const searchTerm = searchInput.value.toLowerCase();
+                const container = document.getElementById('tasksContainer');
+                container.innerHTML = '';
+
+                const filteredTasks = this.tasks.filter(task => {
+                    return (
+                        task.title.toLowerCase().includes(searchTerm) ||
+                        task.description.toLowerCase().includes(searchTerm) ||
+                        task.date.includes(searchTerm) ||
+                        task.time.includes(searchTerm) ||
+                        this.getPriorityText(task.priority).toLowerCase().includes(searchTerm)
+                    );
+                });
+
+                // Ordenar e renderizar as tarefas filtradas
+                const sortedTasks = filteredTasks.sort((a, b) => {
+                    const priorityOrder = { high: 0, medium: 1, low: 2 };
+                    const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
+                    if (priorityDiff !== 0) return priorityDiff;
+                    return new Date(`${a.date} ${a.time}`) - new Date(`${b.date} ${b.time}`);
+                });
+
+                sortedTasks.forEach(task => {
+                    const taskElement = this.createTaskElement(task);
+                    container.appendChild(taskElement);
+                });
+            }
+
+            sendTaskToWhatsApp(taskId) {
+                const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
+                if (!whatsappNumber || whatsappNumber.length !== 11) {
+                    this.showToast('Por favor, insira um número de WhatsApp válido com DDD (11 dígitos)');
+                    return;
+                }
+
+                const task = this.tasks.find(t => t.id === taskId);
+                if (!task) return;
+
+                const message = this.formatTaskForWhatsApp(task);
+                const whatsappUrl = `https://wa.me/55${whatsappNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+
+            sendAllTasksToWhatsApp() {
+                const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
+                if (!whatsappNumber || whatsappNumber.length !== 11) {
+                    this.showToast('Por favor, insira um número de WhatsApp válido com DDD (11 dígitos)');
+                    return;
+                }
+
+                const message = this.tasks.map(task => this.formatTaskForWhatsApp(task)).join('\n\n-------------------\n\n');
+                const whatsappUrl = `https://wa.me/55${whatsappNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+
+            formatTaskForWhatsApp(task) {
+                return `🎯 *${task.title}*\n\n` +
+                    `📝 ${task.description}\n\n` +
+                    `⚡ Prioridade: ${this.getPriorityText(task.priority)}\n` +
+                    `📅 Data: ${task.date}\n` +
+                    `⏰ Hora: ${task.time}\n` +
+                    `✅ Status: ${task.completed ? 'Concluída' : 'Pendente'}\n\n` +
+                    (task.aiSummary ? `🤖 *Análise IA:*\n${task.aiSummary}` : '');
             }
         }
 
