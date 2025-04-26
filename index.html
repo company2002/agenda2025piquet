@@ -553,6 +553,17 @@
                 this.init();
             }
 
+            deleteAISummary(id) {
+                const task = this.tasks.find(t => t.id === id);
+                if (task) {
+                    delete task.aiSummary; // Remove a análise IA da tarefa
+                    this.saveTasks(); // Salva as alterações no localStorage
+                    this.render(); // Atualiza a interface com as mudanças
+                    this.showToast('Análise IA excluída permanentemente!');
+                }
+            }
+
+
             init() {
                 this.setupEventListeners();
                 this.setupTrashModal();
@@ -873,7 +884,6 @@
                 });
             }
 
-
             createTaskElement(task) {
                 const div = document.createElement('div');
                 div.className = `task-item priority-${task.priority}`;
@@ -884,32 +894,34 @@
                 const isOverdue = dueDate < new Date() && !task.completed;
 
                 div.innerHTML = `
-                    <div class="task-content">
-                        <h3>${task.title} ${isOverdue ? '⚠' : ''}</h3>
-                        <p>${task.description}</p>
-                        <small>
-                            Prioridade: ${this.getPriorityText(task.priority)}<br>
-                            Data: ${task.date} ${task.time}<br>
-                            Criado em: ${createdDate}
-                        </small>
-                        ${task.aiSummary ? `
-                            <div class="ai-summary">
-                                <h4>Análise IA:</h4>
-                                <p>${task.aiSummary}</p>
-                            </div>
-                        ` : ''}
-                    </div>
-                    <div class="task-actions">
-                        <button data-tooltip="Gerar/Atualizar análise IA" 
-                                onclick="taskManager.generateTaskSummary(${task.id})">📊</button>
-                        <button data-tooltip="Marcar como ${task.completed ? 'não concluído' : 'concluído'}" 
-                                onclick="taskManager.toggleTaskComplete(${task.id})">
-                                ${task.completed ? '↩' : '✓'}
-                        </button>
-                        <button data-tooltip="Mover para lixeira" 
-                                onclick="taskManager.moveToTrash(${task.id})">🗑</button>
-                    </div>
-                `;
+           <div class="task-content">
+               <h3>${task.title} ${isOverdue ? '⚠' : ''}</h3>
+               <p>${task.description}</p>
+               <small>
+                   Prioridade: ${this.getPriorityText(task.priority)}<br>
+                   Data: ${task.date} ${task.time}<br>
+                   Criado em: ${createdDate}
+               </small>
+               ${task.aiSummary ? `
+                   <div class="ai-summary">
+                       <h4>Análise IA:</h4>
+                       <p>${task.aiSummary}</p>
+                   </div>
+               ` : ''}
+           </div>
+           <div class="task-actions">
+               <button data-tooltip="Gerar/Atualizar análise IA" 
+                       onclick="taskManager.generateTaskSummary(${task.id})">📊</button>
+               <button data-tooltip="Marcar como ${task.completed ? 'não concluído' : 'concluído'}" 
+                       onclick="taskManager.toggleTaskComplete(${task.id})">
+                       ${task.completed ? '↩' : '✓'}
+               </button>
+               <button data-tooltip="Mover para lixeira" 
+                       onclick="taskManager.moveToTrash(${task.id})">🗑</button>
+               <button data-tooltip="Excluir Análise IA" 
+                       onclick="taskManager.deleteAISummary(${task.id})">❌ Análise</button>
+           </div>
+       `;
 
                 return div;
             }
@@ -969,4 +981,5 @@
         const taskManager = new TaskManager();
     </script>
 </body>
+
 </html>
