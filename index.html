@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -512,7 +513,7 @@
         class GeminiAPI {
             constructor() {
                 this.API_KEY = 'AIzaSyDppmbtQHk1lYeZFFwjrM4dpzv01FE1Qok';
-                this.API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+                this.API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
             }
 
             async getResponse(prompt) {
@@ -527,52 +528,22 @@
                                 parts: [{
                                     text: prompt
                                 }]
-                            }],
-                            generationConfig: {
-                                temperature: 0.7,
-                                topK: 40,
-                                topP: 0.95,
-                                maxOutputTokens: 1024,
-                            },
-                            safetySettings: [
-                                {
-                                    category: "HARM_CATEGORY_HARASSMENT",
-                                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                                },
-                                {
-                                    category: "HARM_CATEGORY_HATE_SPEECH",
-                                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                                },
-                                {
-                                    category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                                },
-                                {
-                                    category: "HARM_CATEGORY_DANGEROUS_CONTENT",
-                                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                                }
-                            ]
+                            }]
                         })
                     });
 
                     if (!response.ok) {
-                        throw new Error(`Erro na API: ${response.status}`);
+                        throw new Error('Erro na resposta da API');
                     }
 
                     const data = await response.json();
-
-                    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-                        return data.candidates[0].content.parts[0].text;
-                    } else {
-                        throw new Error('Resposta inválida da API');
-                    }
+                    return data.candidates[0].content.parts[0].text;
                 } catch (error) {
                     console.error('Erro na API Gemini:', error);
-                    return 'Desculpe, ocorreu um erro ao processar sua solicitação.';
+                    throw error;
                 }
             }
         }
-
 
         class TaskManager {
             constructor() {
@@ -901,6 +872,7 @@
                     return dateA - dateB;
                 });
             }
+
 
             createTaskElement(task) {
                 const div = document.createElement('div');
